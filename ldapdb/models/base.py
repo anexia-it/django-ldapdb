@@ -99,7 +99,7 @@ class Model(django.db.models.base.Model):
         if not self.dn:
             # create a new entry
             record_exists = False
-            entry = [('objectClass', self.object_classes)]
+            entry = [('objectClass', [str(c) for c in self.object_classes])]
             new_dn = self.build_dn()
 
             for field in self._meta.fields:
@@ -108,7 +108,7 @@ class Model(django.db.models.base.Model):
                 value = getattr(self, field.name)
                 value = field.get_db_prep_save(value, connection=connection)
                 if value:
-                    entry.append((field.db_column, value))
+                    entry.append((str(field.db_column), value))
 
             logger.debug("Creating new LDAP entry %s" % new_dn)
             connection.add_s(new_dn, entry)

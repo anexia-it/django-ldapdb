@@ -177,7 +177,7 @@ class SQLCompiler(compiler.SQLCompiler):
         else:
             fields = self.query.model._meta.fields
 
-        attrlist = [x.db_column for x in fields if x.db_column]
+        attrlist = [str(x.db_column) for x in fields if x.db_column]
 
         try:
             vals = self.connection.search_s(
